@@ -1,0 +1,212 @@
+import { Button, LineEdit, VerticalBox, HorizontalBox } from "std-widgets.slint";
+
+export component AppWindow inherits Window {
+    title: "OpenRouter Query";
+    min-width: 760px;
+    min-height: 680px;
+    background: #10141d;
+
+    in-out property<string> api-key: "";
+    in-out property<string> status-text: "输入 OpenRouter API Key，然后点击「查询数据」";
+    in-out property<string> key-label: "—";
+    in-out property<string> usage-total: "—";
+    in-out property<string> usage-daily: "—";
+    in-out property<string> usage-weekly: "—";
+    in-out property<string> usage-monthly: "—";
+    in-out property<string> limit-remaining: "—";
+    in-out property<string> free-used: "—";
+    in-out property<string> free-limit: "—";
+    in-out property<string> free-remaining: "—";
+    in-out property<string> free-model-count: "—";
+    in-out property<string> models-text: "尚未加载免费模型";
+    in-out property<bool> busy: false;
+
+    callback refresh-requested();
+
+    VerticalBox {
+        padding: 24px;
+        spacing: 14px;
+
+        HorizontalBox {
+            alignment: center;
+            spacing: 12px;
+            Text {
+                text: "OpenRouter Query";
+                color: #f3f6fc;
+                font-size: 28px;
+                font-weight: 700;
+            }
+            Rectangle { background: transparent; }
+            Text {
+                text: "SLINT  ·  NODE.JS";
+                color: #7f91aa;
+                font-size: 11px;
+            }
+        }
+
+        Text {
+            text: "API KEY";
+            color: #9eacc0;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        HorizontalBox {
+            spacing: 10px;
+            LineEdit {
+                text <=> root.api-key;
+                input-type: password;
+                placeholder-text: "sk-or-v1-...";
+                height: 42px;
+            }
+            Button {
+                text: root.busy ? "查询中…" : "查询数据";
+                enabled: !root.busy && root.api-key != "";
+                clicked => { root.refresh-requested(); }
+            }
+        }
+        Text {
+            text: root.status-text;
+            color: #9eacc0;
+            font-size: 12px;
+            wrap: word-wrap;
+        }
+
+        Text {
+            text: "API KEY 使用统计";
+            color: #f3f6fc;
+            font-size: 17px;
+            font-weight: 700;
+        }
+        HorizontalBox {
+            spacing: 10px;
+            Rectangle {
+                background: #1b2432;
+                border-radius: 9px;
+                padding: 14px;
+                min-height: 82px;
+                VerticalBox {
+                    spacing: 6px;
+                    Text { text: "累计消费"; color: #9eacc0; font-size: 12px; }
+                    Text { text: root.usage-total; color: #f4f7fb; font-size: 21px; font-weight: 700; }
+                }
+            }
+            Rectangle {
+                background: #1b2432;
+                border-radius: 9px;
+                padding: 14px;
+                min-height: 82px;
+                VerticalBox {
+                    spacing: 6px;
+                    Text { text: "今日消费 (UTC)"; color: #9eacc0; font-size: 12px; }
+                    Text { text: root.usage-daily; color: #f4f7fb; font-size: 21px; font-weight: 700; }
+                }
+            }
+            Rectangle {
+                background: #1b2432;
+                border-radius: 9px;
+                padding: 14px;
+                min-height: 82px;
+                VerticalBox {
+                    spacing: 6px;
+                    Text { text: "本周消费 (UTC)"; color: #9eacc0; font-size: 12px; }
+                    Text { text: root.usage-weekly; color: #f4f7fb; font-size: 21px; font-weight: 700; }
+                }
+            }
+            Rectangle {
+                background: #1b2432;
+                border-radius: 9px;
+                padding: 14px;
+                min-height: 82px;
+                VerticalBox {
+                    spacing: 6px;
+                    Text { text: "本月消费 (UTC)"; color: #9eacc0; font-size: 12px; }
+                    Text { text: root.usage-monthly; color: #f4f7fb; font-size: 21px; font-weight: 700; }
+                }
+            }
+        }
+
+        HorizontalBox {
+            spacing: 10px;
+            Rectangle {
+                background: #1b2432;
+                border-radius: 9px;
+                padding: 14px;
+                min-height: 76px;
+                VerticalBox {
+                    spacing: 5px;
+                    Text { text: "Key 剩余额度"; color: #9eacc0; font-size: 12px; }
+                    Text { text: root.limit-remaining; color: #72d6aa; font-size: 19px; font-weight: 700; }
+                }
+            }
+            Rectangle {
+                background: #1b2432;
+                border-radius: 9px;
+                padding: 14px;
+                min-height: 76px;
+                VerticalBox {
+                    spacing: 5px;
+                    Text { text: "免费请求已使用"; color: #9eacc0; font-size: 12px; }
+                    Text { text: root.free-used; color: #f4f7fb; font-size: 19px; font-weight: 700; }
+                }
+            }
+            Rectangle {
+                background: #1b2432;
+                border-radius: 9px;
+                padding: 14px;
+                min-height: 76px;
+                VerticalBox {
+                    spacing: 5px;
+                    Text { text: "每日免费上限"; color: #9eacc0; font-size: 12px; }
+                    Text { text: root.free-limit; color: #f4f7fb; font-size: 19px; font-weight: 700; }
+                }
+            }
+            Rectangle {
+                background: #1b2432;
+                border-radius: 9px;
+                padding: 14px;
+                min-height: 76px;
+                VerticalBox {
+                    spacing: 5px;
+                    Text { text: "免费请求剩余"; color: #9eacc0; font-size: 12px; }
+                    Text { text: root.free-remaining; color: #72d6aa; font-size: 19px; font-weight: 700; }
+                }
+            }
+        }
+
+        HorizontalBox {
+            spacing: 10px;
+            Text { text: "当前 Key"; color: #9eacc0; font-size: 12px; }
+            Text { text: root.key-label; color: #dce5f2; font-size: 12px; }
+            Rectangle { background: transparent; }
+            Text { text: "免费模型"; color: #9eacc0; font-size: 12px; }
+            Text { text: root.free-model-count; color: #72d6aa; font-size: 14px; font-weight: 700; }
+        }
+
+        Text {
+            text: "免费模型列表（ID 以 :free 结尾）";
+            color: #f3f6fc;
+            font-size: 17px;
+            font-weight: 700;
+        }
+        Rectangle {
+            background: #1b2432;
+            border-radius: 9px;
+            padding: 14px;
+            min-height: 190px;
+            VerticalBox {
+                Text {
+                    text: root.models-text;
+                    color: #cbd6e5;
+                    font-size: 12px;
+                    wrap: word-wrap;
+                }
+            }
+        }
+        Text {
+            text: "额度来自 OpenRouter 当前 Key 接口；免费请求按账户规则统计，通常是所有 :free 模型共享。金额和请求额度以 API 实际返回为准。";
+            color: #74849a;
+            font-size: 10px;
+            wrap: word-wrap;
+        }
+    }
+}
