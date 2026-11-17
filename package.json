@@ -1,14 +1,15 @@
 {
   "name": "openrouter-query",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
-  "description": "A native Slint desktop dashboard for OpenRouter API key usage and free models.",
+  "description": "A native Slint desktop dashboard and free-model chat client for OpenRouter.",
   "main": "src/main.js",
   "scripts": {
     "start": "node --import slint-ui/register ."
   },
   "dependencies": {
+    "keytar": "^7.9.0",
     "slint-ui": "^1.19.0"
   },
   "engines": {
